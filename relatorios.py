@@ -31,10 +31,8 @@ def gerar_relatorio_estoque_atual():
         return pd.read_sql(query, conn)
     finally:
         conn.close()
-<<<<<<< HEAD
 
 def gerar_relatorio_estoque_xlsx():
-    """Gera o relatório de estoque atual formatado como XLSX."""
     import openpyxl
     from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
     from io import BytesIO
@@ -53,7 +51,6 @@ def gerar_relatorio_estoque_xlsx():
     finally:
         conn.close()
 
-    # Abreviações de unidade
     abrev = {'unidade': 'un', 'caixa': 'cx', 'pacote': 'pct'}
     df['unidade'] = df['unidade'].apply(lambda x: abrev.get(str(x).lower(), x) if x else x)
 
@@ -61,7 +58,6 @@ def gerar_relatorio_estoque_xlsx():
     ws = wb.active
     ws.title = "Estoque Atual"
 
-    # Cabeçalho
     colunas = ['Produto', 'Descrição', 'Qtd', 'Estoque Mínimo', 'Especificação', 'Un', 'Categoria']
     header_fill = PatternFill("solid", fgColor="2C3E50")
     header_font = Font(color="FFFFFF", bold=True, size=11)
@@ -77,23 +73,20 @@ def gerar_relatorio_estoque_xlsx():
 
     ws.row_dimensions[1].height = 22
 
-    # Dados
     warning_fill = PatternFill("solid", fgColor="FFF3CD")
-    ok_fill = PatternFill("solid", fgColor="D4EDDA")
 
     for row_idx, row in enumerate(df.itertuples(index=False), 2):
-        valores = [row.nome, row.descricao, row.quantidade, row.estoque_minimo, row.especificacao, row.unidade, row.categoria]
+        valores = [row.nome, row.descricao, row.quantidade, row.estoque_minimo,
+                   row.especificacao, row.unidade, row.categoria]
         abaixo_minimo = row.quantidade < row.estoque_minimo
-        linha_fill = warning_fill if abaixo_minimo else None
 
         for col, val in enumerate(valores, 1):
             cell = ws.cell(row=row_idx, column=col, value=val)
             cell.border = border
             cell.alignment = Alignment(vertical='center', wrap_text=True)
-            if linha_fill:
-                cell.fill = linha_fill
+            if abaixo_minimo:
+                cell.fill = warning_fill
 
-    # Larguras automáticas
     larguras = [30, 30, 8, 14, 30, 6, 20]
     for i, w in enumerate(larguras, 1):
         ws.column_dimensions[ws.cell(1, i).column_letter].width = w
@@ -102,5 +95,3 @@ def gerar_relatorio_estoque_xlsx():
     wb.save(output)
     output.seek(0)
     return output
-=======
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9

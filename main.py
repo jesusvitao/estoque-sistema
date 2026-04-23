@@ -2,26 +2,17 @@ from flask import Flask, render_template, request, session, redirect, url_for, f
 from users import autenticar_usuario, listar_usuarios, buscar_usuario_por_id, criar_usuario, atualizar_usuario, atualizar_senha_usuario, deletar_usuario, listar_roles, criar_ou_atualizar_usuario_google
 from produtos import listar_produtos, adicionar_produto, buscar_produto_por_id, atualizar_produto, deletar_produto, listar_categorias, criar_categoria, atualizar_categoria, deletar_categoria
 from movimentacoes import registrar_movimentacao, listar_movimentacoes_por_produto, listar_todas_movimentacoes
-<<<<<<< HEAD
 from relatorios import gerar_relatorio_movimentacoes, gerar_relatorio_estoque_atual, gerar_relatorio_estoque_xlsx
 from functools import wraps
 from io import BytesIO
 from datetime import timedelta
-=======
-from relatorios import gerar_relatorio_movimentacoes, gerar_relatorio_estoque_atual
-from functools import wraps
-from io import BytesIO
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9
 import os
 import google.auth.transport.requests
 from google.oauth2 import id_token
 
 app = Flask(__name__)
 app.secret_key = "chave_secreta_teste"  # Altere em produção!
-<<<<<<< HEAD
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=8)
-=======
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9
 
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "SEU_CLIENT_ID_AQUI")
 
@@ -37,7 +28,6 @@ def login_required(f):
     return decorated_function
 
 def role_required(*roles):
-    """Aceita uma ou mais roles permitidas. Ex: @role_required('admin') ou @role_required('admin', 'usuario')"""
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
@@ -67,10 +57,7 @@ def login():
         email_digitado = request.form["email"]
         usuario = autenticar_usuario(email_digitado, request.form["senha"])
         if usuario:
-<<<<<<< HEAD
             session.permanent = True
-=======
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9
             session["usuario_id"] = usuario["id"]
             session["usuario_nome"] = usuario["nome"]
             session["usuario_role"] = usuario["role"]
@@ -84,27 +71,19 @@ def auth_google():
     try:
         data = request.get_json()
         credential = data.get("credential")
-
         id_info = id_token.verify_oauth2_token(
             credential,
             google.auth.transport.requests.Request(),
             GOOGLE_CLIENT_ID
         )
-
         google_id = id_info["sub"]
         email = id_info["email"]
         nome = id_info.get("name", email)
-
         usuario = criar_ou_atualizar_usuario_google(google_id, email, nome)
-
-<<<<<<< HEAD
         session.permanent = True
-=======
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9
         session["usuario_id"] = usuario["id"]
         session["usuario_nome"] = usuario["nome"]
         session["usuario_role"] = usuario["role"]
-
         return jsonify({"success": True})
     except Exception as e:
         return jsonify({"success": False, "message": str(e)})
@@ -126,7 +105,7 @@ def dashboard():
 
 @app.route("/produtos")
 @login_required
-@role_required("admin", "usuario")
+@role_required("admin", "user")
 def produtos():
     return render_template("produtos.html", produtos=listar_produtos())
 
@@ -214,7 +193,7 @@ def movimentar_estoque(produto_id):
 
 @app.route("/historico_movimentacoes")
 @login_required
-@role_required("admin", "usuario")
+@role_required("admin", "user")
 def historico_movimentacoes():
     return render_template("historico_movimentacoes.html", movimentacoes=listar_todas_movimentacoes())
 
@@ -233,7 +212,7 @@ def relatorio_movimentacoes():
 
 @app.route("/relatorio/estoque_atual")
 @login_required
-@role_required("admin", "usuario")
+@role_required("admin", "user")
 def relatorio_estoque_atual():
     try:
         tabela_html = gerar_relatorio_estoque_atual().to_html(classes="table table-striped", index=False)
@@ -241,6 +220,18 @@ def relatorio_estoque_atual():
     except Exception as e:
         flash(f"Erro ao gerar relatório: {e}", "danger")
         return redirect(url_for("dashboard"))
+
+@app.route("/relatorio/estoque_atual/xlsx")
+@login_required
+@role_required("admin", "user")
+def relatorio_estoque_atual_xlsx():
+    try:
+        output = gerar_relatorio_estoque_xlsx()
+        return send_file(output, mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                         as_attachment=True, download_name="relatorio_estoque_atual.xlsx")
+    except Exception as e:
+        flash(f"Erro ao exportar relatório: {e}", "danger")
+        return redirect(url_for("relatorio_estoque_atual"))
 
 # ==================== Usuários ====================
 
@@ -350,44 +341,6 @@ def deletar_categoria_route(categoria_id):
         flash(f"Erro ao deletar categoria: {e}", "danger")
     return redirect(url_for("categorias"))
 
-# ==================== Exportação de Relatórios ====================
-
-<<<<<<< HEAD
-@app.route("/relatorio/estoque_atual/xlsx")
-@login_required
-@role_required("admin", "usuario")
-def relatorio_estoque_atual_xlsx():
-    try:
-        output = gerar_relatorio_estoque_xlsx()
-        return send_file(output, mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", as_attachment=True, download_name="relatorio_estoque_atual.xlsx")
-=======
-@app.route("/relatorio/estoque_atual/csv")
-@login_required
-@role_required("admin", "usuario")
-def relatorio_estoque_atual_csv():
-    try:
-        output = BytesIO()
-        gerar_relatorio_estoque_atual().to_csv(output, index=False, encoding='utf-8-sig')
-        output.seek(0)
-        return send_file(output, mimetype="text/csv", as_attachment=True, download_name="relatorio_estoque_atual.csv")
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9
-    except Exception as e:
-        flash(f"Erro ao exportar relatorio: {e}", "danger")
-        return redirect(url_for("relatorio_estoque_atual"))
-
-@app.route("/relatorio/movimentacoes/csv")
-@login_required
-@role_required("admin")
-def relatorio_movimentacoes_csv():
-    try:
-        output = BytesIO()
-        gerar_relatorio_movimentacoes().to_csv(output, index=False, encoding='utf-8-sig')
-        output.seek(0)
-        return send_file(output, mimetype="text/csv", as_attachment=True, download_name="relatorio_movimentacoes.csv")
-    except Exception as e:
-        flash(f"Erro ao exportar relatorio: {e}", "danger")
-        return redirect(url_for("relatorio_movimentacoes"))
-
 # ==================== Erros ====================
 
 @app.errorhandler(404)
@@ -401,9 +354,4 @@ def erro_interno(e):
 # ==================== Execução ====================
 
 if __name__ == "__main__":
-<<<<<<< HEAD
     app.run(debug=True, host="0.0.0.0", port=5000)
-=======
-    import os
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9

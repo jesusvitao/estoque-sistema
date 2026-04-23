@@ -34,11 +34,7 @@
         {% endwith %}
 
         <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-3">← Voltar ao Dashboard</a>
-<<<<<<< HEAD
         <a href="{{ url_for('relatorio_estoque_atual_xlsx') }}" class="btn btn-success mb-3">⬇️ Exportar em XLSX</a>
-=======
-        <a href="{{ url_for('relatorio_estoque_atual_csv') }}" class="btn btn-success mb-3">📥 Exportar em CSV</a>
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9
 
         <div class="table-responsive">
             {{ tabela_html | safe }}

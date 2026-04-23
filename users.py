@@ -126,10 +126,11 @@ def criar_ou_atualizar_usuario_google(google_id, email, nome):
         conn.close()
         return {"id": usuario[0], "nome": usuario[1], "role": usuario[2]}
 
-    # Cria novo usuário com role 'usuario'
-    cursor.execute("SELECT id FROM roles WHERE usuario = 'usuario' LIMIT 1")
+    # Cria novo usuário com a role não-admin do banco (seja 'user', 'usuario', etc)
+    cursor.execute("SELECT id, usuario FROM roles WHERE usuario != 'admin' ORDER BY id LIMIT 1")
     role = cursor.fetchone()
-    role_id = role[0] if role else 2  # fallback id 2
+    role_id = role[0] if role else 2
+    role_name = role[1] if role else "user"
 
     cursor.execute(
         "INSERT INTO usuarios (nome, email, google_id, role_id) VALUES (%s, %s, %s, %s) RETURNING id",
@@ -139,4 +140,4 @@ def criar_ou_atualizar_usuario_google(google_id, email, nome):
     conn.commit()
     cursor.close()
     conn.close()
-    return {"id": novo_id, "nome": nome, "role": "usuario"}
+    return {"id": novo_id, "nome": nome, "role": role_name}

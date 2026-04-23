@@ -36,59 +36,36 @@
         <a href="{{ url_for('nova_categoria') }}" class="btn btn-primary mb-3">+ Adicionar Nova Categoria</a>
         <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-3">← Voltar ao Dashboard</a>
 
-<<<<<<< HEAD
-        <!-- Legenda -->
         <div class="acoes-legenda mb-3">
             <strong>Legenda:</strong>
             <span>✏️ Editar categoria</span>
             <span>🗑️ Deletar categoria</span>
         </div>
 
-=======
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9
         <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
-<<<<<<< HEAD
                         <th>Nome da Categoria</th>
                         <th>Ações</th>
-=======
-                        <th>ID</th>
-                        <th>Nome da Categoria</th>
-                        <th>Acoes</th>
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9
                     </tr>
                 </thead>
                 <tbody>
                     {% if categorias %}
                         {% for categoria in categorias %}
                         <tr>
-<<<<<<< HEAD
                             <td><strong>{{ categoria[1] }}</strong></td>
                             <td class="acoes-btns">
                                 <a href="{{ url_for('editar_categoria_route', categoria_id=categoria[0]) }}" class="btn-emoji" title="Editar">✏️</a>
                                 <form action="{{ url_for('deletar_categoria_route', categoria_id=categoria[0]) }}" method="POST" style="display:inline;">
                                     <button type="submit" class="btn-emoji btn-emoji-delete" title="Deletar" onclick="return confirm('Tem certeza que deseja deletar esta categoria?');">🗑️</button>
-=======
-                            <td>{{ categoria[0] }}</td>
-                            <td><strong>{{ categoria[1] }}</strong></td>
-                            <td>
-                                <a href="{{ url_for('editar_categoria_route', categoria_id=categoria[0]) }}" class="btn btn-sm btn-warning">✏️ Editar</a>
-                                <form action="{{ url_for('deletar_categoria_route', categoria_id=categoria[0]) }}" method="POST" style="display:inline;">
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja deletar esta categoria?');">🗑️ Deletar</button>
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9
                                 </form>
                             </td>
                         </tr>
                         {% endfor %}
                     {% else %}
                         <tr>
-<<<<<<< HEAD
                             <td colspan="2" class="text-center">Nenhuma categoria cadastrada.</td>
-=======
-                            <td colspan="3" class="text-center">Nenhuma categoria cadastrada.</td>
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9
                         </tr>
                     {% endif %}
                 </tbody>

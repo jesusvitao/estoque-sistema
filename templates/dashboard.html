@@ -49,21 +49,18 @@
 
         {% set role = session.get("usuario_role") %}
 
-        {% if role == "admin" or role == "usuario" %}
+        {% if role == "admin" or role == "user" %}
         <div class="dashboard-container">
-
             <div class="dashboard-card">
                 <h3>📦 Gerenciar Produtos</h3>
                 <p>Visualize os produtos do estoque.</p>
                 <a href="{{ url_for('produtos') }}" class="btn btn-primary">Acessar</a>
             </div>
-
             <div class="dashboard-card">
                 <h3>📊 Histórico de Movimentações</h3>
                 <p>Visualize todas as entradas e saídas de estoque.</p>
                 <a href="{{ url_for('historico_movimentacoes') }}" class="btn btn-info">Acessar</a>
             </div>
-
             <div class="dashboard-card">
                 <h3>📋 Relatório de Estoque</h3>
                 <p>Visualize o estado atual do seu estoque.</p>
@@ -76,20 +73,17 @@
                 <p>Gere relatórios detalhados das movimentações de estoque.</p>
                 <a href="{{ url_for('relatorio_movimentacoes') }}" class="btn btn-info">Acessar</a>
             </div>
-
             <div class="dashboard-card">
                 <h3>👥 Gerenciar Usuarios</h3>
                 <p>Crie, edite ou delete usuarios e atribua perfis de acesso.</p>
                 <a href="{{ url_for('usuarios') }}" class="btn btn-warning">Acessar</a>
             </div>
-
             <div class="dashboard-card">
                 <h3>🏷️ Gerenciar Categorias</h3>
                 <p>Crie, edite ou delete categorias de produtos.</p>
                 <a href="{{ url_for('categorias') }}" class="btn btn-info">Acessar</a>
             </div>
             {% endif %}
-
         </div>
         {% else %}
         <div class="alert alert-warning mt-4">
@@ -100,11 +94,7 @@
     </div>
 
     <footer class="mt-5">
-<<<<<<< HEAD
         <p>&copy; 2024 Sistema de Controle de Estoque. Todos os direitos reservados.</p>
-=======
-        <p> </p>
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

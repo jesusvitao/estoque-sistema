@@ -33,13 +33,12 @@
             {% endif %}
         {% endwith %}
 
-<<<<<<< HEAD
         {% if session.get('usuario_role') == 'admin' %}
         <a href="{{ url_for('novo_produto') }}" class="btn btn-primary mb-3">+ Adicionar Novo Produto</a>
         {% endif %}
         <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-3">← Voltar ao Dashboard</a>
-        <a href="{{ url_for('relatorio_estoque_atual_xlsx') }}" class="btn btn-success mb-3">⬇️ Exportar XLSX</a>
 
+        {% if session.get('usuario_role') == 'admin' %}
         <!-- Legenda de ações -->
         <div class="acoes-legenda mb-3">
             <strong>Legenda:</strong>
@@ -47,15 +46,11 @@
             <span>📦 Movimentar estoque</span>
             <span>🗑️ Deletar produto</span>
         </div>
+        {% endif %}
 
         <!-- Barra de filtro e pesquisa -->
         <div class="filtro-bar mb-3">
             <input type="text" id="pesquisa" class="form-control filtro-input" placeholder="🔍 Pesquisar por nome, categoria ou especificação...">
-            <select id="filtroStatus" class="form-control filtro-select">
-                <option value="">Todos os status</option>
-                <option value="Ativo">Ativo</option>
-                <option value="Inativo">Inativo</option>
-            </select>
             <select id="filtroCategoria" class="form-control filtro-select">
                 <option value="">Todas as categorias</option>
                 {% set categorias_vistas = [] %}
@@ -81,40 +76,17 @@
                         {% if session.get('usuario_role') == 'admin' %}
                         <th>Ações</th>
                         {% endif %}
-=======
-        <a href="{{ url_for('novo_produto') }}" class="btn btn-primary mb-3">+ Adicionar Novo Produto</a>
-        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-3">← Voltar ao Dashboard</a>
-
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Categoria</th>
-                        <th>Especificacao</th>
-                        <th>Quantidade</th>
-                        <th>Estoque Minimo</th>
-                        <th>Unidade</th>
-                        <th>Status</th>
-                        <th>Acoes</th>
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9
                     </tr>
                 </thead>
                 <tbody>
                     {% if produtos %}
                         {% for produto in produtos %}
-<<<<<<< HEAD
                         {% set unidade_abrev = {
-                            'unidade': 'un',
-                            'caixa': 'cx',
-                            'pacote': 'pct',
-                            'un': 'un',
-                            'cx': 'cx',
-                            'pct': 'pct'
+                            'unidade': 'un', 'caixa': 'cx', 'pacote': 'pct',
+                            'un': 'un', 'cx': 'cx', 'pct': 'pct'
                         } %}
                         {% set unid = unidade_abrev.get(produto[12]|lower, produto[12]) if produto[12] else '-' %}
-                        <tr data-nome="{{ produto[1]|lower }}" data-categoria="{{ produto[6]|lower if produto[6] else '' }}" data-espec="{{ produto[11]|lower if produto[11] else '' }}" data-status="{{ 'Ativo' if produto[5] else 'Inativo' }}">
+                        <tr data-nome="{{ produto[1]|lower }}" data-categoria="{{ produto[6]|lower if produto[6] else '' }}" data-espec="{{ produto[11]|lower if produto[11] else '' }}">
                             <td><strong>{{ produto[1] }}</strong></td>
                             <td>{{ produto[6] if produto[6] else '-' }}</td>
                             <td title="{{ produto[11] if produto[11] else '' }}">{{ produto[11][:30] if produto[11] else '-' }}{% if produto[11] and produto[11]|length > 30 %}...{% endif %}</td>
@@ -136,62 +108,23 @@
                                 </form>
                             </td>
                             {% endif %}
-=======
-                        <tr>
-                            <td>{{ produto[0] }}</td>
-                            <td><strong>{{ produto[1] }}</strong></td>
-                            <td>{{ produto[6] if produto[6] else '-' }}</td>
-                            <td>{{ produto[11][:30] if produto[11] else '-' }}...</td>
-                            <td>
-                                {% if produto[3] < produto[13] %}
-                                    <span class="badge badge-warning">{{ produto[3] }} {{ produto[12] }}</span>
-                                {% else %}
-                                    <span class="badge badge-success">{{ produto[3] }} {{ produto[12] }}</span>
-                                {% endif %}
-                            </td>
-                            <td>{{ produto[13] }} {{ produto[12] }}</td>
-                            <td>{{ produto[12] }}</td>
-                            <td>
-                                {% if produto[5] %}
-                                    <span class="badge badge-success">Ativo</span>
-                                {% else %}
-                                    <span class="badge badge-danger">Inativo</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <a href="{{ url_for('editar_produto', produto_id=produto[0]) }}" class="btn btn-sm btn-warning">✏️ Editar</a>
-                                <a href="{{ url_for('movimentar_estoque', produto_id=produto[0]) }}" class="btn btn-sm btn-info">📤 Movimentar</a>
-                                <form action="{{ url_for('deletar_produto_route', produto_id=produto[0]) }}" method="POST" style="display:inline;">
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja deletar este produto?');">🗑️ Deletar</button>
-                                </form>
-                            </td>
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9
                         </tr>
                         {% endfor %}
                     {% else %}
                         <tr>
-<<<<<<< HEAD
                             <td colspan="7" class="text-center">Nenhum produto cadastrado.</td>
-=======
-                            <td colspan="9" class="text-center">Nenhum produto cadastrado.</td>
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9
                         </tr>
                     {% endif %}
                 </tbody>
             </table>
         </div>
 
-<<<<<<< HEAD
         <div id="semResultados" class="alert alert-warning mt-2" style="display:none;">
             Nenhum produto encontrado com os filtros aplicados.
         </div>
 
         <div class="alert alert-info mt-3">
             <strong>Dica:</strong> Produtos com quantidade abaixo do estoque mínimo aparecem em <span class="badge badge-warning">amarelo</span>.
-=======
-        <div class="alert alert-info mt-4">
-            <strong>Dica:</strong> Produtos com quantidade abaixo do estoque minimo aparecem em <span class="badge badge-warning">amarelo</span> na coluna de quantidade.
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9
         </div>
     </div>
 
@@ -202,11 +135,9 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<<<<<<< HEAD
     <script>
         function filtrarTabela() {
             const texto = document.getElementById('pesquisa').value.toLowerCase();
-            const status = document.getElementById('filtroStatus').value;
             const categoria = document.getElementById('filtroCategoria').value.toLowerCase();
             const linhas = document.querySelectorAll('#tabelaProdutos tbody tr[data-nome]');
             let visiveis = 0;
@@ -215,13 +146,11 @@
                 const nome = tr.dataset.nome || '';
                 const cat = tr.dataset.categoria || '';
                 const espec = tr.dataset.espec || '';
-                const st = tr.dataset.status || '';
 
                 const matchTexto = nome.includes(texto) || cat.includes(texto) || espec.includes(texto);
-                const matchStatus = !status || st === status;
                 const matchCat = !categoria || cat === categoria;
 
-                if (matchTexto && matchStatus && matchCat) {
+                if (matchTexto && matchCat) {
                     tr.style.display = '';
                     visiveis++;
                 } else {
@@ -233,10 +162,7 @@
         }
 
         document.getElementById('pesquisa').addEventListener('input', filtrarTabela);
-        document.getElementById('filtroStatus').addEventListener('change', filtrarTabela);
         document.getElementById('filtroCategoria').addEventListener('change', filtrarTabela);
     </script>
-=======
->>>>>>> 482e1205a295fd1055e3568df4bf7514753257e9
 </body>
 </html>
