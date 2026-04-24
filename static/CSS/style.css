@@ -401,7 +401,7 @@ footer p {
 /* Barra de filtro */
 .filtro-bar {
     display: flex;
-    gap: 0.75rem;
+    gap: 0.90rem;
     flex-wrap: wrap;
 }
 .filtro-input {
