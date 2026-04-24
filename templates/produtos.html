@@ -51,7 +51,7 @@
         <!-- Barra de filtro e pesquisa -->
         <div class="filtro-bar mb-3">
             <input type="text" id="pesquisa" class="form-control filtro-input" placeholder="🔍 Pesquisar por nome, categoria ou especificação...">
-            <select id="filtroCategoria" class="form-control filtro-select">
+            <select id="filtroCategoria" class="form-control filtro-input">
                 <option value="">Todas as categorias</option>
                 {% set categorias_vistas = [] %}
                 {% for produto in produtos %}
