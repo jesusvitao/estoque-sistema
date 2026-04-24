@@ -56,7 +56,7 @@
                 {% set categorias_vistas = [] %}
                 {% for produto in produtos %}
                     {% if produto[6] and produto[6] not in categorias_vistas %}
-                        {% if categorias_vistas.append(produto[6]) %}{% endif %}
+                        {% do categorias_vistas.append(produto[6]) %}
                         <option value="{{ produto[6] }}">{{ produto[6] }}</option>
                     {% endif %}
                 {% endfor %}
