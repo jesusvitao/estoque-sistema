@@ -34,7 +34,7 @@
         {% endwith %}
 
         <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-3">← Voltar ao Dashboard</a>
-        <a href="{{ url_for('relatorio_movimentacoes_csv') }}" class="btn btn-success mb-3">📥 Exportar em CSV</a>
+        <a href="{{ url_for('relatorio_movimentacoes_xlsx') }}" class="btn btn-success mb-3">📥 Exportar em xlsx</a>
 
         <div class="table-responsive">
             {{ tabela_html | safe }}
