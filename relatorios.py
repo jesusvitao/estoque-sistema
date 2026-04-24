@@ -95,3 +95,48 @@ def gerar_relatorio_estoque_xlsx():
     wb.save(output)
     output.seek(0)
     return output
+
+def gerar_relatorio_movimentacoes_xlsx():
+    import openpyxl
+    from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+    from io import BytesIO
+
+    df = gerar_relatorio_movimentacoes()
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Movimentações"
+
+    colunas = list(df.columns)
+    header_fill = PatternFill("solid", fgColor="2C3E50")
+    header_font = Font(color="FFFFFF", bold=True, size=11)
+    thin = Side(style='thin', color='CCCCCC')
+    border = Border(left=thin, right=thin, top=thin, bottom=thin)
+
+    for col, titulo in enumerate(colunas, 1):
+        cell = ws.cell(row=1, column=col, value=titulo)
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.alignment = Alignment(horizontal='center', vertical='center')
+        cell.border = border
+
+    entrada_fill = PatternFill("solid", fgColor="D4EDDA")
+    saida_fill = PatternFill("solid", fgColor="F8D7DA")
+
+    for row_idx, row in enumerate(df.itertuples(index=False), 2):
+        for col, val in enumerate(row, 1):
+            cell = ws.cell(row=row_idx, column=col, value=val)
+            cell.border = border
+            cell.alignment = Alignment(vertical='center', wrap_text=True)
+        tipo = str(row[2]).lower() if len(row) > 2 else ''
+        fill = entrada_fill if tipo == 'entrada' else saida_fill
+        for col in range(1, len(colunas) + 1):
+            ws.cell(row=row_idx, column=col).fill = fill
+
+    for i, col in enumerate(ws.columns, 1):
+        ws.column_dimensions[col[0].column_letter].width = 22
+
+    output = BytesIO()
+    wb.save(output)
+    output.seek(0)
+    return output
