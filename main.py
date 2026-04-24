@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, session, redirect, url_for, f
 from users import autenticar_usuario, listar_usuarios, buscar_usuario_por_id, criar_usuario, atualizar_usuario, atualizar_senha_usuario, deletar_usuario, listar_roles, criar_ou_atualizar_usuario_google
 from produtos import listar_produtos, adicionar_produto, buscar_produto_por_id, atualizar_produto, deletar_produto, listar_categorias, criar_categoria, atualizar_categoria, deletar_categoria
 from movimentacoes import registrar_movimentacao, listar_movimentacoes_por_produto, listar_todas_movimentacoes
-from relatorios import gerar_relatorio_movimentacoes, gerar_relatorio_estoque_atual, gerar_relatorio_estoque_xlsx
+from relatorios import gerar_relatorio_movimentacoes, gerar_relatorio_estoque_atual, gerar_relatorio_estoque_xlsx, gerar_relatorio_movimentacoes_xlsx
 from functools import wraps
 from io import BytesIO
 from datetime import timedelta
@@ -209,6 +209,18 @@ def relatorio_movimentacoes():
     except Exception as e:
         flash(f"Erro ao gerar relatório: {e}", "danger")
         return redirect(url_for("dashboard"))
+
+@app.route("/relatorio/movimentacoes/xlsx")
+@login_required
+@role_required("admin")
+def relatorio_movimentacoes_xlsx():
+    try:
+        output = gerar_relatorio_movimentacoes_xlsx()
+        return send_file(output, mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                         as_attachment=True, download_name="relatorio_movimentacoes.xlsx")
+    except Exception as e:
+        flash(f"Erro ao exportar relatório: {e}", "danger")
+        return redirect(url_for("relatorio_movimentacoes"))
 
 @app.route("/relatorio/estoque_atual")
 @login_required
