@@ -33,42 +33,81 @@
             {% endif %}
         {% endwith %}
 
-        <form method="POST" class="mt-4" style="max-width: 600px;">
-            <div class="form-group">
-                <label for="nome">Nome Completo:</label>
-                <input type="text" class="form-control" id="nome" name="nome" value="{{ usuario[1] if usuario else '' }}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" name="email" value="{{ usuario[2] if usuario else '' }}" required>
-            </div>
-
-            {% if not usuario %}
-            <div class="form-group">
-                <label for="senha">Senha:</label>
-                <input type="password" class="form-control" id="senha" name="senha" placeholder="Digite a senha do novo usuario" required>
-            </div>
-            {% endif %}
-
-            <div class="form-group">
-                <label for="role_id">Perfil (Role):</label>
-                <select class="form-control filtro-select" id="role_id" name="role_id" required>
-                    <option value="">-- Selecione um perfil --</option>
-                    {% for role in roles %}
-                        <option value="{{ role[0] }}" {% if usuario and usuario[3] == role[0] %}selected{% endif %}>
-                            {% if role[1] == 'admin' %}👑 Admin{% else %}👤 Usuario{% endif %}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">{% if usuario %}Atualizar{% else %}Cadastrar{% endif %}</button>
-                <a href="{{ url_for('usuarios') }}" class="btn btn-secondary">Cancelar</a>
-            </div>
-        </form>
+       <form method="POST" class="mt-4" style="max-width: 600px;">
+    <div class="form-group">
+        <label for="nome">Nome Completo:</label>
+        <input 
+            type="text" 
+            class="form-control" 
+            id="nome" 
+            name="nome" 
+            value="{{ usuario[1] if usuario else '' }}" 
+            required
+        >
     </div>
+
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input 
+            type="email" 
+            class="form-control" 
+            id="email" 
+            name="email" 
+            value="{{ usuario[2] if usuario else '' }}" 
+            required
+        >
+    </div>
+
+    {% if not usuario %}
+        <div class="form-group">
+            <label for="senha">Senha:</label>
+            <input 
+                type="password" 
+                class="form-control" 
+                id="senha" 
+                name="senha" 
+                placeholder="Digite a senha do novo usuário" 
+                required
+            >
+        </div>
+    {% else %}
+        <div class="form-group">
+            <label for="senha">Nova senha:</label>
+            <input 
+                type="password" 
+                class="form-control" 
+                id="senha" 
+                name="senha" 
+                placeholder="Deixe em branco para manter a senha atual"
+            >
+            <small class="form-text text-muted">
+                Preencha este campo apenas se quiser alterar a senha do usuário.
+            </small>
+        </div>
+    {% endif %}
+
+    <div class="form-group">
+        <label for="role_id">Perfil (Role):</label>
+        <select class="form-control filtro-select" id="role_id" name="role_id" required>
+            <option value="">-- Selecione um perfil --</option>
+            {% for role in roles %}
+                <option value="{{ role[0] }}" {% if usuario and usuario[3] == role[0] %}selected{% endif %}>
+                    {% if role[1] == 'admin' %}👑 Admin{% else %}👤 Usuario{% endif %}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">
+            {% if usuario %}Atualizar{% else %}Cadastrar{% endif %}
+        </button>
+
+        <a href="{{ url_for('usuarios') }}" class="btn btn-secondary">
+            Cancelar
+        </a>
+    </div>
+</form>
 
     <footer class="mt-5">
         <p>&copy; Coordenação de Tecnologia da Informação.</p>
