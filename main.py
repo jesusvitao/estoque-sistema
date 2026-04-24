@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash, send_file, jsonify
+from werkzeug.security import generate_password_hash
+from flask import session, flash, redirect, url_for, request, render_template
 from users import autenticar_usuario, listar_usuarios, buscar_usuario_por_id, criar_usuario, atualizar_usuario, atualizar_senha_usuario, deletar_usuario, listar_roles, criar_ou_atualizar_usuario_google
 from produtos import listar_produtos, adicionar_produto, buscar_produto_por_id, atualizar_produto, deletar_produto, listar_categorias, criar_categoria, atualizar_categoria, deletar_categoria
 from movimentacoes import registrar_movimentacao, listar_movimentacoes_por_produto, listar_todas_movimentacoes
@@ -40,6 +42,64 @@ def role_required(*roles):
             return f(*args, **kwargs)
         return decorated_function
     return decorator
+
+#====================== Senhas Alter =========================
+
+@app.route('/admin/alterar_senha/<int:id_usuario>', methods=['GET', 'POST'])
+def alterar_senha_usuario(id_usuario):
+    if 'usuario_id' not in session:
+        flash('Você precisa estar logado.', 'danger')
+        return redirect(url_for('login'))
+
+    if session.get('usuario_role') != 'admin':
+        flash('Acesso negado. Apenas administradores podem alterar senhas.', 'danger')
+        return redirect(url_for('dashboard'))
+
+    conn = conectar()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT id, nome, email
+        FROM usuarios
+        WHERE id = %s
+    """, (id_usuario,))
+    usuario = cursor.fetchone()
+
+    if not usuario:
+        cursor.close()
+        conn.close()
+        flash('Usuário não encontrado.', 'danger')
+        return redirect(url_for('listar_usuarios'))
+
+    if request.method == 'POST':
+        nova_senha = request.form.get('nova_senha')
+        confirmar_senha = request.form.get('confirmar_senha')
+
+        if nova_senha != confirmar_senha:
+            cursor.close()
+            conn.close()
+            flash('As senhas não coincidem.', 'danger')
+            return redirect(url_for('alterar_senha_usuario', id_usuario=id_usuario))
+
+        senha_hash = generate_password_hash(nova_senha)
+
+        cursor.execute("""
+            UPDATE usuarios
+            SET senha = %s
+            WHERE id = %s
+        """, (senha_hash, id_usuario))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        flash('Senha alterada com sucesso.', 'success')
+        return redirect(url_for('listar_usuarios'))
+
+    cursor.close()
+    conn.close()
+
+    return render_template('alterar_senha_usuario.html', usuario=usuario)
 
 # ==================== Autenticação ====================
 
