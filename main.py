@@ -69,7 +69,7 @@ def alterar_senha_usuario(id_usuario):
         cursor.close()
         conn.close()
         flash('Usuário não encontrado.', 'danger')
-        return redirect(url_for('listar_usuarios'))
+        return redirect(url_for('usuarios'))
 
     if request.method == 'POST':
         nova_senha = request.form.get('nova_senha')
@@ -79,7 +79,7 @@ def alterar_senha_usuario(id_usuario):
             cursor.close()
             conn.close()
             flash('As senhas não coincidem.', 'danger')
-            return redirect(url_for('alt_senha_usuario', id_usuario=id_usuario))
+            return redirect(url_for('alterar_senha_usuario', id_usuario=id_usuario))
 
         senha_hash = generate_password_hash(nova_senha)
 
@@ -94,7 +94,7 @@ def alterar_senha_usuario(id_usuario):
         conn.close()
 
         flash('Senha alterada com sucesso.', 'success')
-        return redirect(url_for('listar_usuarios'))
+        return redirect(url_for('usuarios'))
 
     cursor.close()
     conn.close()
