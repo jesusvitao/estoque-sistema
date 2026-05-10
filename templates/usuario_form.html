@@ -58,19 +58,18 @@
         >
     </div>
 
-    {% if not usuario %}
-        <div class="form-group">
-            <label for="senha">Senha:</label>
-            <input 
-                type="password" 
-                class="form-control" 
-                id="senha" 
-                name="senha" 
-                placeholder="Digite a senha do novo usuário" 
-                required
-            >
-        </div>
-    {% else %}
+{% if not usuario %}
+<div class="form-group">
+    <label for="senha">Senha:</label>
+    <input type="password" class="form-control" id="senha" name="senha" placeholder="Digite a senha do novo usuario" required>
+</div>
+{% else %}
+<div class="form-group">
+    <label for="nova_senha">Nova Senha:</label>
+    <input type="password" class="form-control" id="nova_senha" name="nova_senha" placeholder="Deixe em branco para manter a senha atual">
+    <small class="form-text text-muted">Preencha apenas se quiser alterar a senha do usuário.</small>
+</div>
+{% endif %}
         <div class="form-group">
             <label for="senha">Nova senha:</label>
             <input 
