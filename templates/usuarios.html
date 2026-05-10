@@ -62,20 +62,43 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <a href="{{ url_for('editar_usuario_route', usuario_id=usuario[0]) }}" class="btn btn-sm btn-warning">✏️ Editar</a>
-                                <form action="{{ url_for('deletar_usuario_route', usuario_id=usuario[0]) }}" method="POST" style="display:inline;">
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja deletar este usuario?');">🗑️ Deletar</button>
-                                </form>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr>
-                            <td colspan="5" class="text-center">Nenhum usuario cadastrado.</td>
-                        </tr>
-                    {% endif %}
-                </tbody>
-            </table>
+<div class="acoes-legenda mb-3">
+    <strong>Legenda:</strong>
+    <span>✏️ Editar usuário</span>
+    <span>🗑️ Deletar usuário</span>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Perfil (Role)</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for usuario in usuarios %}
+        <tr>
+            <td><strong>{{ usuario[1] }}</strong></td>
+            <td>{{ usuario[2] }}</td>
+            <td>
+                {% if usuario[4] == 'admin' %}
+                    <span class="badge badge-danger">👑 Admin</span>
+                {% else %}
+                    <span class="badge badge-info">👤 Usuario</span>
+                {% endif %}
+            </td>
+            <td class="acoes-btns">
+                <a href="{{ url_for('editar_usuario_route', usuario_id=usuario[0]) }}" class="btn-emoji" title="Editar">✏️</a>
+                <form action="{{ url_for('deletar_usuario_route', usuario_id=usuario[0]) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn-emoji btn-emoji-delete" title="Deletar" onclick="return confirm('Tem certeza que deseja deletar este usuário?');">🗑️</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
         </div>
     </div>
 
