@@ -79,7 +79,7 @@ def alterar_senha_usuario(id_usuario):
             cursor.close()
             conn.close()
             flash('As senhas não coincidem.', 'danger')
-            return redirect(url_for('alterar_senha_usuario', id_usuario=id_usuario))
+            return redirect(url_for('alt_senha_usuario', id_usuario=id_usuario))
 
         senha_hash = generate_password_hash(nova_senha)
 
