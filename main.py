@@ -340,6 +340,9 @@ def editar_usuario_route(usuario_id):
         try:
             nome = request.form["nome"]
             atualizar_usuario(usuario_id, nome, request.form["email"], int(request.form["role_id"]))
+            nova_senha = request.form.get("nova_senha", "").strip()
+            if nova_senha:
+                atualizar_senha_usuario(usuario_id, nova_senha)
             flash(f"Usuario {nome} atualizado com sucesso!", "success")
             return redirect(url_for("usuarios"))
         except Exception as e:
