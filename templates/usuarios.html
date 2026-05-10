@@ -36,22 +36,26 @@
         <a href="{{ url_for('novo_usuario') }}" class="btn btn-primary mb-3">+ Adicionar Novo Usuario</a>
         <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-3">← Voltar ao Dashboard</a>
 
+        <div class="acoes-legenda mb-3">
+            <strong>Legenda:</strong>
+            <span>✏️ Editar usuário</span>
+            <span>🗑️ Deletar usuário</span>
+        </div>
+
         <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Nome</th>
                         <th>Email</th>
                         <th>Perfil (Role)</th>
-                        <th>Acoes</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% if usuarios %}
                         {% for usuario in usuarios %}
                         <tr>
-                            <td>{{ usuario[0] }}</td>
                             <td><strong>{{ usuario[1] }}</strong></td>
                             <td>{{ usuario[2] }}</td>
                             <td>
@@ -61,44 +65,21 @@
                                     <span class="badge badge-info">👤 Usuario</span>
                                 {% endif %}
                             </td>
-                            <td>
-<div class="acoes-legenda mb-3">
-    <strong>Legenda:</strong>
-    <span>✏️ Editar usuário</span>
-    <span>🗑️ Deletar usuário</span>
-</div>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Perfil (Role)</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for usuario in usuarios %}
-        <tr>
-            <td><strong>{{ usuario[1] }}</strong></td>
-            <td>{{ usuario[2] }}</td>
-            <td>
-                {% if usuario[4] == 'admin' %}
-                    <span class="badge badge-danger">👑 Admin</span>
-                {% else %}
-                    <span class="badge badge-info">👤 Usuario</span>
-                {% endif %}
-            </td>
-            <td class="acoes-btns">
-                <a href="{{ url_for('editar_usuario_route', usuario_id=usuario[0]) }}" class="btn-emoji" title="Editar">✏️</a>
-                <form action="{{ url_for('deletar_usuario_route', usuario_id=usuario[0]) }}" method="POST" style="display:inline;">
-                    <button type="submit" class="btn-emoji btn-emoji-delete" title="Deletar" onclick="return confirm('Tem certeza que deseja deletar este usuário?');">🗑️</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                            <td class="acoes-btns">
+                                <a href="{{ url_for('editar_usuario_route', usuario_id=usuario[0]) }}" class="btn-emoji" title="Editar">✏️</a>
+                                <form action="{{ url_for('deletar_usuario_route', usuario_id=usuario[0]) }}" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn-emoji btn-emoji-delete" title="Deletar" onclick="return confirm('Tem certeza que deseja deletar este usuário?');">🗑️</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center">Nenhum usuário cadastrado.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -108,6 +89,6 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
